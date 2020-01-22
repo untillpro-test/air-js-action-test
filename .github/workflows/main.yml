@@ -12,6 +12,9 @@ jobs:
         fetch-depth: 0
     - uses: untillpro-test/air-js-action@master
     - name: Build
+      env:
+        GOOS: windows
+        GOARCH: 386
       run: |
         go build ./...
         go test ./...
@@ -23,3 +26,7 @@ jobs:
           git merge $GITHUB_SHA
           git push 2>&1
         fi
+    - uses: actions/upload-artifact@v1
+      with:
+      name: air-js-action-test
+      path: air-js-action-test.exe
