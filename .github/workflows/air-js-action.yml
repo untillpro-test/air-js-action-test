@@ -1,0 +1,24 @@
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: untillpro-test/air-js-action@master
+    - run: |
+      go build ./...
+      go test ./...
+    - run: |
+      echo "## Merge to master"
+      if [ "$GITHUB_REF" = 'refs/heads/develop' ]; then
+        git fetch origin master
+        git checkout master
+        git merge $GITHUB_SHA
+        git push 2>&1
+      fi
