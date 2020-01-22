@@ -11,14 +11,15 @@ jobs:
       with:
         fetch-depth: 0
     - uses: untillpro-test/air-js-action@master
-    - run: |
-      go build ./...
-      go test ./...
-    - run: |
-      echo "## Merge to master"
-      if [ "$GITHUB_REF" = 'refs/heads/develop' ]; then
-        git fetch origin master
-        git checkout master
-        git merge $GITHUB_SHA
-        git push 2>&1
-      fi
+    - name: Build
+      run: |
+        go build ./...
+        go test ./...
+    - name: Merge to master
+      run: |
+        if [ "$GITHUB_REF" = 'refs/heads/develop' ]; then
+          git fetch origin master
+          git checkout master
+          git merge $GITHUB_SHA
+          git push 2>&1
+        fi
